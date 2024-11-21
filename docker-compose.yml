@@ -1,0 +1,11 @@
+services:
+  postgres:
+    container_name: sinapse-pg
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=sinapseDEV
+      - POSTGRES_PASSWORD=77rQEVfs5jUz
+      - POSTGRES_DB=sinapse
+      - PGDATA=/data/postgres
