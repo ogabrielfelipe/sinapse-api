@@ -35,6 +35,26 @@ export class InMemoryResponsibleRepository implements ResponsiblesRepository {
     }
   }
 
+  async EditPassword(id: string, password: string) {
+    const responsible = this.items.find((item) =>
+      item.id.equals(new UniqueEntityID(id)),
+    )
+
+    const index = this.items.findIndex((item) =>
+      item.id.equals(new UniqueEntityID(id)),
+    )
+
+    responsible.password = password
+
+    this.items[index] = responsible
+  }
+
+  async delete(id: string) {
+    const responsibles = this.items.filter((item) => item.id.toString() !== id)
+
+    this.items = responsibles
+  }
+
   async findByEmail(email: string): Promise<Responsible | null> {
     const responsible = this.items.find(
       (responsible) => responsible.email === email,
