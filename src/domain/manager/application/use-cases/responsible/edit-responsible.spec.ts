@@ -83,8 +83,6 @@ describe('Edit Responsible', () => {
       (item) => item.id.equals(new UniqueEntityID('responsible-01')),
     )
 
-    console.log(responsibleAfterEdit.changeLog)
-
     expect(result.isRight()).toBe(true)
     expect(responsibleAfterEdit.name).toEqual('John Doe Updated')
 
@@ -92,8 +90,6 @@ describe('Edit Responsible', () => {
       inMemoryAddressResponsibleRepository.items.find((item) =>
         item.id.equals(new UniqueEntityID('responsible-address-01')),
       )
-
-    console.log(responsibleAddressAfterEdit.changeLog)
 
     expect(result.isRight()).toBe(true)
     expect(responsibleAddressAfterEdit.street).toEqual('street test Updated')

@@ -14,11 +14,11 @@ export interface GetResponsiblesByAttributesRequest {
 
 type GetResponsiblesByAttributesResponse = Either<
   ResourceNotFoundError,
-  { docs: ResponsibleDetails }
+  ResponsibleDetails
 >
 
 @Injectable()
-export class GetResponsibleByAttributes {
+export class GetResponsibleByAttributesUseCase {
   constructor(private responsiblesRepository: ResponsiblesRepository) {}
 
   async execute(
@@ -35,8 +35,6 @@ export class GetResponsibleByAttributes {
       )
     }
 
-    return right({
-      docs: responsible,
-    })
+    return right(responsible)
   }
 }

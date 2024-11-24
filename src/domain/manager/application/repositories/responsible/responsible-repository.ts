@@ -7,6 +7,8 @@ export abstract class ResponsiblesRepository {
 
   abstract save(Responsible: Responsible): Promise<void>
 
+  abstract EditPassword(id: string, password: string): Promise<void>
+
   abstract findByEmail(email: string): Promise<Responsible | null>
 
   abstract findById(id: string): Promise<Responsible | null>
@@ -14,4 +16,6 @@ export abstract class ResponsiblesRepository {
   abstract findDetailsByAttributes(
     search: GetResponsiblesByAttributesRequest,
   ): Promise<ResponsibleDetails | null>
+
+  abstract delete(id: string): Promise<void>
 }

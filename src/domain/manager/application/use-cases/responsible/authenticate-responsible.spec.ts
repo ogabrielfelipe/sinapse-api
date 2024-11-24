@@ -5,10 +5,12 @@ import { AuthenticateResponsibleUseCase } from './authenticate-responsible'
 import { makeResponsible } from 'test/factories/make-responsible'
 import { WrongCredentialsError } from './errors/wrong-credentials-error'
 import { InMemoryAddressResponsibleRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
+import { FakeComparer } from 'test/cryptography/fake-comparer'
 
 let inMemoryResponsibleRepository: InMemoryResponsibleRepository
 let inMemoryAddressResponsibleRepository: InMemoryAddressResponsibleRepository
 let fakeHasher: FakeHasher
+let fakeComparer: FakeComparer
 let fakeEncrypter: FakeEncrypter
 let sut: AuthenticateResponsibleUseCase
 
@@ -21,18 +23,21 @@ describe('Authenticate Responsible', () => {
     )
     fakeHasher = new FakeHasher()
     fakeEncrypter = new FakeEncrypter()
+    fakeComparer = new FakeComparer()
 
     sut = new AuthenticateResponsibleUseCase(
       inMemoryResponsibleRepository,
-      fakeHasher,
+      fakeComparer,
       fakeEncrypter,
     )
   })
 
   it('should be able to authenticate a responsible', async () => {
+    const passwordHashed = await fakeHasher.hash('Password123')
+
     const { responsible } = makeResponsible({
       email: 'john.doe@mail.com',
-      password: 'Password123-hashed',
+      password: passwordHashed,
     })
 
     await inMemoryResponsibleRepository.create(responsible)
