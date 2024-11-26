@@ -5,6 +5,10 @@ pnpm format
 pnpm lint:fix
 pnpm lint
 
+# Obtém a lista de arquivos modificados pelo último comando
+modified_files=$(git diff --name-only --cached)
 
+# Adiciona apenas os arquivos modificados ao stage
+git add $modified_files
 
 echo 'Done'
