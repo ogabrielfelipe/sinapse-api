@@ -7,6 +7,8 @@ import { EditResponsibleController } from './controllers/responsible/edit-respon
 import { EditResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/edit-responsible'
 import { ChangePasswordResponsibleController } from './controllers/responsible/change-password-responsible.controller'
 import { ChangePasswordResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/change-password-responsible'
+import { DeleteResponsibleController } from './controllers/responsible/delete-responsible.controller'
+import { DeleteResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/delete-responsible'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -14,11 +16,13 @@ import { ChangePasswordResponsibleUseCase } from '@/domain/manager/application/u
     CreateResponsibleController,
     EditResponsibleController,
     ChangePasswordResponsibleController,
+    DeleteResponsibleController,
   ],
   providers: [
     RegisterResponsibleUseCase,
     EditResponsibleUseCase,
     ChangePasswordResponsibleUseCase,
+    DeleteResponsibleUseCase,
   ],
 })
 export class HttpModule {}
