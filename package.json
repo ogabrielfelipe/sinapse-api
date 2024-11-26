@@ -10,7 +10,7 @@
   "private": true,
   "license": "UNLICENSED",
   "husky": {
-    "hooks": {}
+    "hooks": { "pre-commit": "lint-staged" } 
   },
   "commitlint": {
     "extends": [
