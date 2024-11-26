@@ -91,15 +91,22 @@ export class RegisterResponsibleUseCase {
       isActive: true,
     })
 
+    try {
+      await this.responsibleRepository.create(responsible)
+    } catch (e) {
+      console.log(e)
+    }
+
     const responsibleAddress = ResponsibleAddress.create({
       ...addressResponsible,
       responsibleId: responsible.id,
     })
 
-    Promise.all([
-      this.responsibleRepository.create(responsible),
-      this.responsibleAddressRepository.create(responsibleAddress),
-    ])
+    try {
+      await this.responsibleAddressRepository.create(responsibleAddress)
+    } catch (e) {
+      console.log(e)
+    }
 
     return right({})
   }

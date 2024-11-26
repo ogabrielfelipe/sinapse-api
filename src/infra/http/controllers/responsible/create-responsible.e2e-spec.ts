@@ -41,7 +41,7 @@ describe('E2E -> Create Account Responsible', () => {
     }
 
     const response = await request(app.getHttpServer())
-      .post(`/accounts`)
+      .post(`/responsibles`)
       .send(fakeAccountData)
 
     expect(response.statusCode).toBe(201)
@@ -60,7 +60,7 @@ describe('E2E -> Create Account Responsible', () => {
 
     const address = await prisma.address.findFirst({
       where: {
-        id: responsible.addressId,
+        userId: responsible.id,
       },
     })
 

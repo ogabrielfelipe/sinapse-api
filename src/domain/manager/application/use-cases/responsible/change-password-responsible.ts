@@ -4,7 +4,6 @@ import { Injectable } from '@nestjs/common'
 import { ResponsiblesRepository } from '../../repositories/responsible/responsible-repository'
 import { HashGenerator } from '@/core/application/cryptography/hash-generator'
 import { HashComparer } from '@/core/application/cryptography/hash-comparer'
-import { Responsible } from '@/domain/manager/enterprise/entities/responsible'
 import { PasswordAreSameError } from '@/core/errors/errors/password-are-same-error'
 
 type ChangePasswordResponsibleUseCaseRequest = {

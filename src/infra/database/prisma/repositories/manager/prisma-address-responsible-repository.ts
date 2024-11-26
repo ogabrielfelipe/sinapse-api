@@ -1,18 +1,65 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '../../prisma.service'
-import { AddressResponsiblesRepository } from '@/domain/manager/application/repositories/responsible/address-responsible-repository'
-import { AddressResponsible } from '@/domain/manager/enterprise/entities/responsible-address'
+import { ResponsibleAddressesRepository } from '@/domain/manager/application/repositories/responsible/address-responsible-repository'
+import { ResponsibleAddress } from '@/domain/manager/enterprise/entities/responsible-address'
+import { PrismaAddressResponsibleMapper } from '../../mappers/manager/prisma-address-responsible'
 
 @Injectable()
 export class PrismaAddressResponsibleRepository
-  implements AddressResponsiblesRepository
+  implements ResponsibleAddressesRepository
 {
   constructor(private readonly prisma: PrismaService) {}
-  create(address: AddressResponsible): Promise<void> {
-    throw new Error('Method not implemented.')
+
+  async create(address: ResponsibleAddress): Promise<void> {
+    const addressDomain = PrismaAddressResponsibleMapper.toPrisma(address)
+
+    await this.prisma.address.create({
+      data: {
+        ...addressDomain,
+      },
+    })
   }
 
-  findById(id: string): Promise<AddressResponsible | null> {
-    throw new Error('Method not implemented.')
+  async save(address: ResponsibleAddress): Promise<void> {
+    const addressDomain = PrismaAddressResponsibleMapper.toPrisma(address)
+
+    await this.prisma.address.update({
+      where: {
+        id: addressDomain.id,
+      },
+      data: {
+        ...addressDomain,
+      },
+    })
+  }
+
+  async findByResponsibleId(
+    responsibleId: string,
+  ): Promise<ResponsibleAddress | null> {
+    const address = await this.prisma.address.findFirst({
+      where: {
+        userId: responsibleId,
+      },
+    })
+
+    if (!address) {
+      return null
+    }
+
+    return PrismaAddressResponsibleMapper.toDomain(address)
+  }
+
+  async findById(id: string): Promise<ResponsibleAddress | null> {
+    const address = await this.prisma.address.findFirst({
+      where: {
+        id,
+      },
+    })
+
+    if (!address) {
+      return null
+    }
+
+    return PrismaAddressResponsibleMapper.toDomain(address)
   }
 }

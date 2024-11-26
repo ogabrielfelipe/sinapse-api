@@ -1,11 +1,7 @@
-import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { InMemoryResponsibleRepository } from './../../../../../../test/manager/application/repositories/in-memory-responsible-repository'
 import { makeResponsible } from 'test/factories/make-responsible'
 import { InMemoryAddressResponsibleRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
-import { ChangePasswordResponsibleUseCase } from './change-password-responsible'
-import { FakeComparer } from 'test/cryptography/fake-comparer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { PasswordAreSameError } from '@/core/errors/errors/password-are-same-error'
 import { DeleteResponsibleUseCase } from './delete-responsible'
 import { ResponsibleNotFoundError } from './errors/responsible-not-found'
 

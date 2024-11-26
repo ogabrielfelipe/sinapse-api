@@ -3,17 +3,20 @@ import { PrismaService } from '../../prisma.service'
 import { ResponsiblesRepository } from '@/domain/manager/application/repositories/responsible/responsible-repository'
 import { Responsible } from '@/domain/manager/enterprise/entities/responsible'
 import { PrismaResponsibleMapper } from '../../mappers/manager/prisma-responsible-mapper'
-import { AddressResponsible } from '@/domain/manager/enterprise/entities/responsible-address'
+import { GetResponsiblesByAttributesRequest } from '@/domain/manager/application/use-cases/responsible/get-responsibles-by-attributes'
+import { ResponsibleDetails } from '@/domain/manager/application/use-cases/responsible/value-object/responsible-details'
+import { PrismaResponsibleDetailsMapper } from '../../mappers/manager/prisma-responsible-details'
 
 @Injectable()
 export class PrismaResponsibleRepository implements ResponsiblesRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(responsible: Responsible, address: AddressResponsible) {
-    const data = PrismaResponsibleMapper.toPrisma(responsible, address)
+  async create(responsible: Responsible) {
+    const data = PrismaResponsibleMapper.toPrisma(responsible)
 
     await this.prisma.user.create({
       data: {
+        id: data.id,
         name: data.name,
         email: data.email,
         password: data.password,
@@ -21,19 +24,14 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
         phone: data.phone,
         role: 'RESPONSIBLE',
         isActive: true,
-        address: {
-          create: {
-            ...data.address,
-          },
-        },
+        changeLog: data.changeLog,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
       },
     })
   }
 
-  async findByEmail(email: string): Promise<{
-    responsible: Responsible
-    address?: AddressResponsible | null
-  } | null> {
+  async findByEmail(email: string): Promise<Responsible | null> {
     const responsible = await this.prisma.user.findUnique({
       where: {
         email,
@@ -44,13 +42,10 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
       return null
     }
 
-    return PrismaResponsibleMapper.toDomain({ ...responsible, address: null })
+    return PrismaResponsibleMapper.toDomain(responsible)
   }
 
-  async findById(id: string): Promise<{
-    responsible: Responsible
-    address: AddressResponsible
-  } | null> {
+  async findById(id: string): Promise<Responsible | null> {
     const responsible = await this.prisma.user.findUnique({
       where: {
         id,
@@ -68,9 +63,60 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
       return null
     }
 
-    return PrismaResponsibleMapper.toDomain({
-      ...responsible,
-      address: responsible.address,
+    return PrismaResponsibleMapper.toDomain(responsible)
+  }
+
+  async save(responsible: Responsible) {
+    const data = PrismaResponsibleMapper.toPrisma(responsible)
+
+    await this.prisma.user.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+        email: data.email,
+        document: data.document,
+        phone: data.phone,
+        isActive: data.isActive,
+        changeLog: data.changeLog,
+        createdAt: data.createdAt,
+        updatedAt: data.updatedAt,
+      },
+    })
+  }
+
+  async EditPassword(id: string, password: string): Promise<void> {
+    await this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password,
+      },
+    })
+  }
+
+  async findDetailsByAttributes(
+    search: GetResponsiblesByAttributesRequest,
+  ): Promise<ResponsibleDetails | null> {
+    const responsibleDetails = await this.prisma.user.findFirstOrThrow({
+      where: { ...search },
+      include: {
+        address: true,
+      },
+    })
+    return PrismaResponsibleDetailsMapper.toDomain(
+      responsibleDetails,
+      responsibleDetails.address[0],
+    )
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.prisma.user.delete({
+      where: {
+        id,
+      },
     })
   }
 }

@@ -17,9 +17,8 @@ import { ZodValidationPipe } from '../../pipes/zod-validation.pipe'
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { InvalidDocumentError } from '@/core/errors/invalid-document'
 import { ResponsibleAlreadyExistsError } from '@/domain/manager/application/use-cases/responsible/errors/responsible-already-exists-error'
-import { BcryptHasher } from '@/infra/cryptography/bcrypt-hasher'
 
-const createAccountBodySchema = z.object({
+const createResponsibleBodySchema = z.object({
   name: z.string().min(1).max(255),
   document: z.string().min(1).max(14),
   email: z.string().email().max(255),
@@ -35,23 +34,23 @@ const createAccountBodySchema = z.object({
   }),
 })
 
-class CreateAccountDto extends createZodDto(createAccountBodySchema) {}
+class CreateResponsibleDto extends createZodDto(createResponsibleBodySchema) {}
 
-@ApiTags('accounts')
-@Controller('/accounts')
-export class CreateAccountController {
+@ApiTags('responsibles')
+@Controller('/responsibles')
+export class CreateResponsibleController {
   constructor(private registerResponsible: RegisterResponsibleUseCase) {}
 
   @Post()
   @HttpCode(201)
-  @UsePipes(new ZodValidationPipe(createAccountBodySchema))
-  @ApiOperation({ summary: 'Create a new account' })
-  @ApiBody({ type: CreateAccountDto })
-  @ApiResponse({ status: 201, description: 'Account created successfully' })
+  @UsePipes(new ZodValidationPipe({ body: createResponsibleBodySchema }))
+  @ApiOperation({ summary: 'Create a new responsible' })
+  @ApiBody({ type: CreateResponsibleDto })
+  @ApiResponse({ status: 201, description: 'Responsible created successfully' })
   @ApiResponse({ status: 400, description: 'Document invalid' })
-  @ApiResponse({ status: 409, description: 'Account already exists' })
+  @ApiResponse({ status: 409, description: 'Responsible already exists' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
-  async handle(@Body() body: CreateAccountDto) {
+  async handle(@Body() body: CreateResponsibleDto) {
     const { name, document, email, phone, password, address } = body
 
     const result = await this.registerResponsible.execute({
@@ -83,4 +82,6 @@ export class CreateAccountController {
   }
 }
 
-export const CreateAccountSchema = generateSchema(createAccountBodySchema)
+export const CreateResponsibleSchema = generateSchema(
+  createResponsibleBodySchema,
+)

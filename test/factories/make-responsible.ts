@@ -1,6 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { DocumentCPF } from '@/core/entities/value-object/document-cpf'
-import { AddressResponsible } from '@/domain/manager/enterprise/entities/responsible-address'
 import {
   Responsible,
   ResponsibleProps,
@@ -24,7 +23,7 @@ export function makeResponsible(
       email: faker.internet.email(),
       password: faker.internet.password(),
       document,
-      phone: faker.phone.number(),
+      phone: faker.phone.number({ style: 'national' }),
       isActive: true,
       ...override,
     },
@@ -33,7 +32,7 @@ export function makeResponsible(
 
   return { responsible }
 }
-/*
+
 @Injectable()
 export class ResponsibleFactory {
   constructor(private prisma: PrismaService) {}
@@ -47,10 +46,11 @@ export class ResponsibleFactory {
 
     await this.prisma.user.create({
       data: {
-        result.responsible,
+        ...result,
+        role: 'RESPONSIBLE',
       },
     })
 
     return responsible
   }
-} */
+}

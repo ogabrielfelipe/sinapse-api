@@ -4,7 +4,7 @@ import { Optional } from '@/core/types/optional'
 import { AddressProps } from './address'
 import { FieldLogs } from '@/core/types/fieldsLog'
 
-interface ChangeLogEntry {
+export interface ChangeLogEntry {
   field: string
   oldValue: FieldLogs
   newValue: FieldLogs

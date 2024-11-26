@@ -102,11 +102,26 @@ export class EditResponsibleUseCase {
       responsible.id,
     )
 
-    responsibleDomain.name = request.responsible.name
-    responsibleDomain.email = request.responsible.email
-    responsibleDomain.document = documentValidated
-    responsibleDomain.isActive = request.responsible.isActive
-    responsibleDomain.phone = request.responsible.phone
+    responsibleDomain.name =
+      request.responsible.name !== responsibleDomain.name
+        ? request.responsible.name
+        : responsibleDomain.name
+    responsibleDomain.email =
+      request.responsible.email !== responsibleDomain.email
+        ? request.responsible.email
+        : responsibleDomain.email
+    responsibleDomain.document =
+      documentValidated !== responsibleDomain.document
+        ? documentValidated
+        : responsibleDomain.document
+    responsibleDomain.isActive =
+      request.responsible.isActive !== responsibleDomain.isActive
+        ? request.responsible.isActive
+        : responsibleDomain.isActive
+    responsibleDomain.phone =
+      request.responsible.phone !== responsibleDomain.phone
+        ? request.responsible.phone
+        : responsibleDomain.phone
 
     const addressDomain = ResponsibleAddress.create(
       {
@@ -121,22 +136,34 @@ export class EditResponsibleUseCase {
       address.id,
     )
 
-    addressDomain.street = request.address.street
-    addressDomain.complement = request.address.complement
-    addressDomain.neighborhood = request.address.neighborhood
-    addressDomain.number = request.address.number
-    addressDomain.city = request.address.city
-    addressDomain.state = request.address.state
+    addressDomain.street =
+      request.address.street !== addressDomain.street
+        ? request.address.street
+        : addressDomain.street
+    addressDomain.complement =
+      request.address.complement !== addressDomain.complement
+        ? request.address.complement
+        : addressDomain.complement
+    addressDomain.neighborhood =
+      request.address.neighborhood !== addressDomain.neighborhood
+        ? request.address.neighborhood
+        : addressDomain.neighborhood
+    addressDomain.number =
+      request.address.number !== addressDomain.number
+        ? request.address.number
+        : addressDomain.number
+    addressDomain.city =
+      request.address.city !== addressDomain.city
+        ? request.address.city
+        : addressDomain.city
+    addressDomain.state =
+      request.address.state !== addressDomain.state
+        ? request.address.state
+        : addressDomain.state
 
-    try {
-      Promise.all([
-        this.responsibleRepository.save(responsibleDomain),
-        this.responsibleAddressRepository.save(addressDomain),
-      ])
-      return right({})
-    } catch (e) {
-      console.log(e)
-      return left(e)
-    }
+    await this.responsibleRepository.save(responsibleDomain)
+    await this.responsibleAddressRepository.save(addressDomain)
+
+    return right({})
   }
 }

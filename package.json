@@ -1,14 +1,27 @@
 {
-  "name": "backend",
+  "name": "sinapse-api",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author":{
+    "name": "Gabriel Felipe",
+    "email": "ogabriel.v.felipe@gmail.com",
+    "url": "https://gafvi.com.br/"
+  },   
   "private": true,
   "license": "UNLICENSED",
+  "husky": {
+    "hooks": {}
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "prepare": "husky",
+    "verify": "pnpm tsc --noEmit",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" ",
     "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "start": "nest start",
