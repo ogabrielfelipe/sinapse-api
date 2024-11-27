@@ -52,7 +52,7 @@ describe('E2E -> Get Responsibles', () => {
       .get(`/responsibles?phone=22999995555`)
       .send()
 
-    console.log(response.body)
+    console.log(JSON.stringify(response.body))
 
     expect(response.statusCode).toBe(200)
     expect(response.body.responsibles).toHaveLength(2)
