@@ -55,6 +55,6 @@ describe('Get Responsible', () => {
       throw new Error('Expected a responsible, but got a ResourceNotFoundError')
     }
 
-    expect(result.value.responsibleId.toString()).toEqual('responsible-01')
+    expect(result.value[0].responsibleId.toString()).toEqual('responsible-01')
   })
 })

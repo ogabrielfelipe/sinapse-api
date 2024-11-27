@@ -74,7 +74,7 @@ export class InMemoryResponsibleRepository implements ResponsiblesRepository {
 
   async findDetailsByAttributes(
     search: GetResponsiblesByAttributesRequest,
-  ): Promise<ResponsibleDetails | null> {
+  ): Promise<ResponsibleDetails[] | null> {
     const responsible = this.items.find((item) => {
       let match = true
 
@@ -101,31 +101,35 @@ export class InMemoryResponsibleRepository implements ResponsiblesRepository {
       return match
     })
 
+    if (!responsible) return null
+
     const address = await this.responsibleAddressRepository.findByResponsibleId(
       responsible.id.toString(),
     )
 
-    return ResponsibleDetails.create({
-      responsibleId: responsible.id,
-      name: responsible.name,
-      email: responsible.email,
-      document: responsible.document,
-      phone: responsible.phone,
-      isActive: responsible.isActive,
-      changeLog: responsible.changeLog,
-      createdAt: responsible.createdAt,
-      address: {
-        addressId: address.id,
-        changeLog: address.changeLog,
-        street: address.street,
-        number: address.number,
-        neighborhood: address.neighborhood,
-        complement: address.complement,
-        state: address.state,
-        city: address.city,
-        createdAt: address.createdAt,
-        responsibleId: address.responsibleId,
-      },
-    })
+    return [
+      ResponsibleDetails.create({
+        responsibleId: responsible.id,
+        name: responsible.name,
+        email: responsible.email,
+        document: responsible.document,
+        phone: responsible.phone,
+        isActive: responsible.isActive,
+        changeLog: responsible.changeLog,
+        createdAt: responsible.createdAt,
+        address: {
+          addressId: address.id,
+          changeLog: address.changeLog,
+          street: address.street,
+          number: address.number,
+          neighborhood: address.neighborhood,
+          complement: address.complement,
+          state: address.state,
+          city: address.city,
+          createdAt: address.createdAt,
+          responsibleId: address.responsibleId,
+        },
+      }),
+    ]
   }
 }

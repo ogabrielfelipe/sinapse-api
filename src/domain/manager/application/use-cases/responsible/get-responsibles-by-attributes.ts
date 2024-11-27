@@ -14,7 +14,7 @@ export interface GetResponsiblesByAttributesRequest {
 
 type GetResponsiblesByAttributesResponse = Either<
   ResourceNotFoundError,
-  ResponsibleDetails
+  ResponsibleDetails[]
 >
 
 @Injectable()
@@ -24,6 +24,8 @@ export class GetResponsibleByAttributesUseCase {
   async execute(
     request: GetResponsiblesByAttributesRequest,
   ): Promise<GetResponsiblesByAttributesResponse> {
+    console.log(request)
+
     const responsible =
       await this.responsiblesRepository.findDetailsByAttributes(request)
 

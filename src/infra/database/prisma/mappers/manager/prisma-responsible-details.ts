@@ -10,6 +10,8 @@ export class PrismaResponsibleDetailsMapper {
     responsible: PrismaUser,
     address: PrismaAddress,
   ): ResponsibleDetails {
+    console.log(responsible, address)
+
     const responsibleDetails = ResponsibleDetails.create({
       responsibleId: new UniqueEntityID(responsible.id),
       name: responsible.name,

@@ -15,7 +15,7 @@ export abstract class ResponsiblesRepository {
 
   abstract findDetailsByAttributes(
     search: GetResponsiblesByAttributesRequest,
-  ): Promise<ResponsibleDetails | null>
+  ): Promise<ResponsibleDetails[] | null>
 
   abstract delete(id: string): Promise<void>
 }
