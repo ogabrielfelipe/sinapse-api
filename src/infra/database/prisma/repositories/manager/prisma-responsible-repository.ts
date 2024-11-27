@@ -99,17 +99,31 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
 
   async findDetailsByAttributes(
     search: GetResponsiblesByAttributesRequest,
-  ): Promise<ResponsibleDetails | null> {
-    const responsibleDetails = await this.prisma.user.findFirstOrThrow({
-      where: { ...search },
+  ): Promise<ResponsibleDetails[] | null> {
+    const responsibleDetails = await this.prisma.user.findMany({
+      where: {
+        ...(search.id && { id: search.id }),
+        ...(search.name && { name: search.name }),
+        ...(search.document && { document: search.document }),
+        ...(search.phone && { phone: search.phone }),
+        ...(search.email && { email: search.email }),
+        role: 'RESPONSIBLE',
+      },
       include: {
         address: true,
       },
     })
-    return PrismaResponsibleDetailsMapper.toDomain(
-      responsibleDetails,
-      responsibleDetails.address[0],
-    )
+
+    if (!responsibleDetails.length) return null
+
+    return responsibleDetails
+      .filter((responsible) => responsible.address)
+      .map((responsible) =>
+        PrismaResponsibleDetailsMapper.toDomain(
+          responsible,
+          responsible.address[0],
+        ),
+      )
   }
 
   async delete(id: string): Promise<void> {
