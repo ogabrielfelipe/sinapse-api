@@ -6,6 +6,7 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { ResponsibleAddressFactory } from 'test/factories/make-responsible-address'
+import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Edit Account Responsible', () => {
   let app: INestApplication
@@ -13,6 +14,7 @@ describe('E2E -> Edit Account Responsible', () => {
 
   let makeResponsible: ResponsibleFactory
   let makeResponsibleAddress: ResponsibleAddressFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -25,11 +27,19 @@ describe('E2E -> Edit Account Responsible', () => {
     prisma = moduleRef.get(PrismaService)
     makeResponsible = moduleRef.get(ResponsibleFactory)
     makeResponsibleAddress = moduleRef.get(ResponsibleAddressFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to edit a Responsible', async () => {
+    const user = await makeResponsible.makePrismaResponsible({})
+
+    const accessToken = jwt.sign({
+      sub: user.id.toString(),
+      roles: ['RESPONSIBLE'],
+    })
+
     const createdResponsible = await makeResponsible.makePrismaResponsible({
       name: 'John Doe',
       email: 'John.Doe@example.com',
@@ -43,6 +53,7 @@ describe('E2E -> Edit Account Responsible', () => {
 
     const response = await request(app.getHttpServer())
       .put(`/responsibles/${createdResponsible.id.toString()}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
         responsible: {
           name: 'John Doe Updated',

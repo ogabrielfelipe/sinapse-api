@@ -5,11 +5,12 @@ import { AppModule } from '@/infra/app.module'
 import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
+import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Change Password of the an Account Responsible', () => {
   let app: INestApplication
   let prisma: PrismaService
-
+  let jwt: JwtService
   let makeResponsible: ResponsibleFactory
 
   beforeAll(async () => {
@@ -22,28 +23,33 @@ describe('E2E -> Change Password of the an Account Responsible', () => {
 
     prisma = moduleRef.get(PrismaService)
     makeResponsible = moduleRef.get(ResponsibleFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to change password of the a Responsible', async () => {
-    const createdResponsible = await makeResponsible.makePrismaResponsible({
-      name: 'John Doe',
-      email: 'John.Doe@example.com',
-      password: 'pass1244',
+    const createdResponsible = await makeResponsible.makePrismaResponsible({})
+
+    const accessToken = jwt.sign({
+      sub: createdResponsible.id.toString(),
+      roles: ['RESPONSIBLE'],
     })
 
     const response = await request(app.getHttpServer())
       .patch(`/responsibles/${createdResponsible.id.toString()}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
         password: 'pass124451',
       })
+
+    console.log(response.error)
 
     expect(response.statusCode).toBe(200)
 
     const updatedResponsible = await prisma.user.findFirst({
       where: {
-        email: 'John.Doe@example.com',
+        email: createdResponsible.email,
         role: 'RESPONSIBLE',
       },
     })

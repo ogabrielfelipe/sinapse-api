@@ -5,10 +5,13 @@ import { AppModule } from '@/infra/app.module'
 import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
+import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Create Account Responsible', () => {
   let app: INestApplication
   let prisma: PrismaService
+  let jwt: JwtService
+  let makeResponsible: ResponsibleFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -19,11 +22,20 @@ describe('E2E -> Create Account Responsible', () => {
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
+    makeResponsible = moduleRef.get(ResponsibleFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to create a new Responsible', async () => {
+    const createdResponsible = await makeResponsible.makePrismaResponsible({})
+
+    const accessToken = jwt.sign({
+      sub: createdResponsible.id.toString(),
+      roles: ['RESPONSIBLE'],
+    })
+
     const fakeAccountData = {
       name: 'John Doe',
       document: '57496904074',
@@ -42,6 +54,7 @@ describe('E2E -> Create Account Responsible', () => {
 
     const response = await request(app.getHttpServer())
       .post(`/responsibles`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(fakeAccountData)
 
     expect(response.statusCode).toBe(201)

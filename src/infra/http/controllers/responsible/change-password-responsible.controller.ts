@@ -19,6 +19,7 @@ import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger'
 import { InvalidDocumentError } from '@/core/errors/invalid-document'
 import { ResponsibleNotFoundError } from '@/domain/manager/application/use-cases/responsible/errors/responsible-not-found'
 import { ChangePasswordResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/change-password-responsible'
+
 import { PasswordAreSameError } from '@/core/errors/errors/password-are-same-error'
 
 const changePasswordResponsibleParamsSchema = z.object({

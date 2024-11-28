@@ -5,10 +5,12 @@ import { AppModule } from '@/infra/app.module'
 import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
+import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Delete a Responsible', () => {
   let app: INestApplication
   let prisma: PrismaService
+  let jwt: JwtService
 
   let makeResponsible: ResponsibleFactory
 
@@ -22,11 +24,19 @@ describe('E2E -> Delete a Responsible', () => {
 
     prisma = moduleRef.get(PrismaService)
     makeResponsible = moduleRef.get(ResponsibleFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to change password of the a Responsible', async () => {
+    const user = await makeResponsible.makePrismaResponsible({})
+
+    const accessToken = jwt.sign({
+      sub: user.id.toString(),
+      roles: ['RESPONSIBLE'],
+    })
+
     const createdResponsible = await makeResponsible.makePrismaResponsible({
       name: 'John Doe',
       email: 'John.Doe@example.com',
@@ -35,6 +45,7 @@ describe('E2E -> Delete a Responsible', () => {
 
     const response = await request(app.getHttpServer())
       .delete(`/responsibles/${createdResponsible.id.toString()}`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
     expect(response.statusCode).toBe(200)

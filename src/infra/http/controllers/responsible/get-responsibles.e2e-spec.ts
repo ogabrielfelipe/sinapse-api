@@ -5,12 +5,14 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { ResponsibleAddressFactory } from 'test/factories/make-responsible-address'
+import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Get Responsibles', () => {
   let app: INestApplication
 
   let makeResponsible: ResponsibleFactory
   let makeResponsibleAddress: ResponsibleAddressFactory
+  let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
@@ -22,11 +24,19 @@ describe('E2E -> Get Responsibles', () => {
 
     makeResponsible = moduleRef.get(ResponsibleFactory)
     makeResponsibleAddress = moduleRef.get(ResponsibleAddressFactory)
+    jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to get Responsibles by attributes', async () => {
+    const user = await makeResponsible.makePrismaResponsible({})
+
+    const accessToken = jwt.sign({
+      sub: user.id.toString(),
+      roles: ['RESPONSIBLE'],
+    })
+
     const createdResponsible = await makeResponsible.makePrismaResponsible({
       name: 'John Doe',
       email: 'john.doe@example.com',
@@ -50,9 +60,8 @@ describe('E2E -> Get Responsibles', () => {
 
     const response = await request(app.getHttpServer())
       .get(`/responsibles?phone=22999995555`)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
-
-    console.log(JSON.stringify(response.body))
 
     expect(response.statusCode).toBe(200)
     expect(response.body.responsibles).toHaveLength(2)
