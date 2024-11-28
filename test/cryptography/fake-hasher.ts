@@ -1,4 +1,4 @@
-import { HashGenerator } from '@/domain/manager/application/cryptography/hash-generator'
+import { HashGenerator } from '@/core/application/cryptography/hash-generator'
 
 export class FakeHasher implements HashGenerator {
   async hash(plain: string) {
