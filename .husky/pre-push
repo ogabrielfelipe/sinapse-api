@@ -1,0 +1,4 @@
+echo 'Verify errors in typesScript and execute unit tests'
+
+pnpm verify
+pnpm test

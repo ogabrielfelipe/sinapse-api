@@ -2,16 +2,14 @@
   "name": "sinapse-api",
   "version": "0.0.1",
   "description": "",
-  "author":{
+  "author": {
     "name": "Gabriel Felipe",
     "email": "ogabriel.v.felipe@gmail.com",
     "url": "https://gafvi.com.br/"
-  },   
+  },
   "private": true,
   "license": "UNLICENSED",
-  "husky": {
-    "hooks": { "pre-commit": "lint-staged" } 
-  },
+  "husky": {},
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -57,7 +55,9 @@
     "faker-br": "^0.4.1",
     "module": "^1.2.5",
     "openapi3-ts": "^4.4.0",
+    "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "vitest-environment-prisma": "^0.4.2",
@@ -81,6 +81,7 @@
     "@types/express": "^4.17.17",
     "@types/multer": "^1.4.12",
     "@types/node": "^20.3.1",
+    "@types/passport-local": "^1.0.38",
     "@types/supertest": "^6.0.2",
     "@typescript-eslint/eslint-plugin": "^8.6.0",
     "@typescript-eslint/parser": "^8.6.0",

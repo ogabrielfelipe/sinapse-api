@@ -1,9 +1,6 @@
 echo 'Verify errors in typesScript, formatting code and execute scripts of the tests'
 
-pnpm verify
-pnpm format
-pnpm lint:fix
-pnpm lint
+pnpm lint-staged
 
 # Obtém a lista de arquivos modificados pelo último comando
 modified_files=$(git diff --name-only --cached)
