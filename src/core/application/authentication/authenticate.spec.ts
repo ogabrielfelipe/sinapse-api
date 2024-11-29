@@ -4,11 +4,11 @@ import { InMemoryResponsibleRepository } from '../../../../test/manager/applicat
 import { AuthenticateUseCase } from './authenticate'
 import { makeResponsible } from 'test/factories/make-responsible'
 import { WrongCredentialsError } from '../../../domain/manager/application/use-cases/responsible/errors/wrong-credentials-error'
-import { InMemoryAddressResponsibleRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
+import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
 import { FakeComparer } from 'test/cryptography/fake-comparer'
 
 let inMemoryResponsibleRepository: InMemoryResponsibleRepository
-let inMemoryAddressResponsibleRepository: InMemoryAddressResponsibleRepository
+let inMemoryAddressRepository: InMemoryAddressRepository
 let fakeHasher: FakeHasher
 let fakeComparer: FakeComparer
 let fakeEncrypter: FakeEncrypter
@@ -16,10 +16,9 @@ let sut: AuthenticateUseCase
 
 describe('Authenticate Responsible', () => {
   beforeEach(() => {
-    inMemoryAddressResponsibleRepository =
-      new InMemoryAddressResponsibleRepository()
+    inMemoryAddressRepository = new InMemoryAddressRepository()
     inMemoryResponsibleRepository = new InMemoryResponsibleRepository(
-      inMemoryAddressResponsibleRepository,
+      inMemoryAddressRepository,
     )
     fakeHasher = new FakeHasher()
     fakeEncrypter = new FakeEncrypter()

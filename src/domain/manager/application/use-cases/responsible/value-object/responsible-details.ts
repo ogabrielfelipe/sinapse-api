@@ -13,7 +13,6 @@ interface ChangeLogEntry {
 
 interface ResponsibleAddress {
   addressId: UniqueEntityID
-  responsibleId: UniqueEntityID
   street: string
   number: string
   neighborhood: string

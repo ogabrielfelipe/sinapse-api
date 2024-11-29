@@ -9,8 +9,8 @@ import { DocumentCNPJ } from '@/core/entities/value-object/document-cnpj'
 import { InvalidCNPJError } from '@/core/errors/invalid-cnpj'
 import { DocumentCPF } from '@/core/entities/value-object/document-cpf'
 import { InvalidCPFError } from '@/core/errors/invalid-cpf'
-import { ResponsibleAddress } from '@/domain/manager/enterprise/entities/responsible-address'
-import { ResponsibleAddressesRepository } from '../../repositories/responsible/address-responsible-repository'
+import { Address } from '@/domain/manager/enterprise/entities/address'
+import { AddressesRepository } from '../../repositories/responsible/address-repository'
 import { AddressNotFoundError } from './errors/address-not-found'
 
 type EditResponsibleUseCaseRequest = {
@@ -42,7 +42,7 @@ type EditResponsibleUseCaseResponse = Either<
 export class EditResponsibleUseCase {
   constructor(
     private responsibleRepository: ResponsiblesRepository,
-    private responsibleAddressRepository: ResponsibleAddressesRepository,
+    private addressRepository: AddressesRepository,
   ) {}
 
   async execute(
@@ -51,9 +51,7 @@ export class EditResponsibleUseCase {
     const responsible = await this.responsibleRepository.findById(
       request.responsible.id,
     )
-    const address = await this.responsibleAddressRepository.findById(
-      request.address.id,
-    )
+    const address = await this.addressRepository.findById(request.address.id)
 
     if (!responsible) {
       return left(new ResponsibleNotFoundError(responsible?.name))
@@ -90,6 +88,18 @@ export class EditResponsibleUseCase {
       return left(new InvalidDocumentError())
     }
 
+    const addressDomain = Address.create(
+      {
+        city: address.city,
+        complement: address.complement,
+        neighborhood: address.neighborhood,
+        number: address.number,
+        state: address.state,
+        street: address.street,
+      },
+      address.id,
+    )
+
     const responsibleDomain = Responsible.create(
       {
         name: responsible.name,
@@ -97,6 +107,7 @@ export class EditResponsibleUseCase {
         document: responsible.document,
         isActive: responsible.isActive,
         phone: responsible.phone,
+        addressId: addressDomain.id,
         password: '',
       },
       responsible.id,
@@ -122,19 +133,6 @@ export class EditResponsibleUseCase {
       request.responsible.phone !== responsibleDomain.phone
         ? request.responsible.phone
         : responsibleDomain.phone
-
-    const addressDomain = ResponsibleAddress.create(
-      {
-        city: address.city,
-        complement: address.complement,
-        neighborhood: address.neighborhood,
-        number: address.number,
-        responsibleId: address.responsibleId,
-        state: address.state,
-        street: address.street,
-      },
-      address.id,
-    )
 
     addressDomain.street =
       request.address.street !== addressDomain.street
@@ -162,7 +160,7 @@ export class EditResponsibleUseCase {
         : addressDomain.state
 
     await this.responsibleRepository.save(responsibleDomain)
-    await this.responsibleAddressRepository.save(addressDomain)
+    await this.addressRepository.save(addressDomain)
 
     return right({})
   }

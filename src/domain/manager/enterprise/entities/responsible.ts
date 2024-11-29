@@ -20,6 +20,7 @@ export interface ResponsibleProps {
   email: string
   password: string
   isActive: boolean
+  addressId: UniqueEntityID
   createdAt: Date
   updatedAt?: Date | null
   changeLog: ChangeLogEntry[]
@@ -82,6 +83,16 @@ export class Responsible extends Entity<ResponsibleProps> {
   set isActive(isActive: boolean) {
     this.logChange('isActive', this.props.isActive, isActive)
     this.props.isActive = isActive
+    this.touch()
+  }
+
+  get addressId() {
+    return this.props.addressId
+  }
+
+  set addressId(addressId: UniqueEntityID) {
+    this.logChange('addressId', this.props.addressId, addressId)
+    this.props.addressId = addressId
     this.touch()
   }
 

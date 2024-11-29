@@ -24,8 +24,6 @@ export class GetResponsibleByAttributesUseCase {
   async execute(
     request: GetResponsiblesByAttributesRequest,
   ): Promise<GetResponsiblesByAttributesResponse> {
-    console.log(request)
-
     const responsible =
       await this.responsiblesRepository.findDetailsByAttributes(request)
 

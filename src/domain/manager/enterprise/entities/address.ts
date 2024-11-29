@@ -3,7 +3,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { FieldLogs } from '@/core/types/fieldsLog'
 import { Optional } from '@/core/types/optional'
 
-interface ChangeLogEntry {
+export interface ChangeLogEntry {
   field: string
   oldValue: FieldLogs
   newValue: FieldLogs
