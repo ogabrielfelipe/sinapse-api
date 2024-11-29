@@ -25,6 +25,7 @@ export function makeResponsible(
       document,
       phone: faker.phone.number({ style: 'national' }),
       isActive: true,
+      addressId: new UniqueEntityID(),
       ...override,
     },
     id,

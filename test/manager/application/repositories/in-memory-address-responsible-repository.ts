@@ -1,17 +1,15 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { ResponsibleAddressesRepository } from '@/domain/manager/application/repositories/responsible/address-responsible-repository'
-import { ResponsibleAddress } from '@/domain/manager/enterprise/entities/responsible-address'
+import { AddressesRepository } from '@/domain/manager/application/repositories/responsible/address-repository'
+import { Address } from '@/domain/manager/enterprise/entities/address'
 
-export class InMemoryAddressResponsibleRepository
-  implements ResponsibleAddressesRepository
-{
-  public items: ResponsibleAddress[] = []
+export class InMemoryAddressRepository implements AddressesRepository {
+  public items: Address[] = []
 
-  async create(address: ResponsibleAddress) {
+  async create(address: Address) {
     this.items.push(address)
   }
 
-  async save(address: ResponsibleAddress): Promise<void> {
+  async save(address: Address): Promise<void> {
     const addressFounded =
       this.items.find((item) => item.id.equals(address.id)) || null
 
@@ -35,16 +33,6 @@ export class InMemoryAddressResponsibleRepository
     return (
       this.items.find((address) => address.id.equals(new UniqueEntityID(id))) ||
       null
-    )
-  }
-
-  async findByResponsibleId(
-    responsibleId: string,
-  ): Promise<ResponsibleAddress | null> {
-    return (
-      this.items.find((item) =>
-        item.responsibleId.equals(new UniqueEntityID(responsibleId)),
-      ) || null
     )
   }
 }

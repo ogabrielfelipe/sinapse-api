@@ -1,20 +1,20 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
-  ResponsibleAddress,
-  ResponsibleAddressProps,
-} from '@/domain/manager/enterprise/entities/responsible-address'
-import { PrismaAddressResponsibleMapper } from '@/infra/database/prisma/mappers/manager/prisma-address-responsible'
+  Address,
+  AddressProps,
+} from '@/domain/manager/enterprise/entities/address'
+import { PrismaAddressMapper } from '@/infra/database/prisma/mappers/manager/prisma-address'
 import { PrismaService } from '@/infra/database/prisma/prisma.service'
 
 import { faker } from '@faker-js/faker'
 import { Injectable } from '@nestjs/common'
 import { randomInt } from 'node:crypto'
 
-export function makeResponsibleAddress(
-  override: Partial<ResponsibleAddressProps> = {},
+export function makeAddress(
+  override: Partial<AddressProps> = {},
   id?: UniqueEntityID,
 ) {
-  const responsibleAddress = ResponsibleAddress.create(
+  const address = Address.create(
     {
       city: faker.location.city(),
       complement: faker.location.direction(),
@@ -22,32 +22,29 @@ export function makeResponsibleAddress(
       number: String(randomInt(10)),
       state: faker.location.country(),
       street: faker.location.street(),
-      responsibleId: new UniqueEntityID(),
       ...override,
     },
     id,
   )
 
-  return { responsibleAddress }
+  return { address }
 }
 
 @Injectable()
-export class ResponsibleAddressFactory {
+export class AddressFactory {
   constructor(private prisma: PrismaService) {}
 
-  async makePrismaResponsibleAddress(
-    data: Partial<ResponsibleAddressProps> = {},
-  ): Promise<ResponsibleAddress> {
-    const { responsibleAddress } = makeResponsibleAddress(data)
+  async makePrismaAddress(data: Partial<AddressProps> = {}): Promise<Address> {
+    const { address } = makeAddress(data)
 
-    const address = PrismaAddressResponsibleMapper.toPrisma(responsibleAddress)
+    const addressMapper = PrismaAddressMapper.toPrisma(address)
 
     await this.prisma.address.create({
       data: {
-        ...address,
+        ...addressMapper,
       },
     })
 
-    return responsibleAddress
+    return address
   }
 }

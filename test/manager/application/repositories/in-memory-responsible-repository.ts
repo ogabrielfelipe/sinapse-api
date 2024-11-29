@@ -3,13 +3,13 @@ import { ResponsiblesRepository } from '@/domain/manager/application/repositorie
 import { GetResponsiblesByAttributesRequest } from '@/domain/manager/application/use-cases/responsible/get-responsibles-by-attributes'
 import { ResponsibleDetails } from '@/domain/manager/application/use-cases/responsible/value-object/responsible-details'
 import { Responsible } from '@/domain/manager/enterprise/entities/responsible'
-import { InMemoryAddressResponsibleRepository } from './in-memory-address-responsible-repository'
+import { InMemoryAddressRepository } from './in-memory-address-responsible-repository'
 
 export class InMemoryResponsibleRepository implements ResponsiblesRepository {
   public items: Responsible[] = []
 
   constructor(
-    private responsibleAddressRepository: InMemoryAddressResponsibleRepository,
+    private responsibleAddressRepository: InMemoryAddressRepository,
   ) {}
 
   async create(responsible: Responsible) {
@@ -27,6 +27,7 @@ export class InMemoryResponsibleRepository implements ResponsiblesRepository {
 
       responsibleFounded.name = responsible.name
       responsibleFounded.email = responsible.email
+      responsibleFounded.addressId = responsible.addressId
       responsibleFounded.document = responsible.document
       responsibleFounded.isActive = responsible.isActive
       responsibleFounded.phone = responsible.phone
@@ -103,8 +104,8 @@ export class InMemoryResponsibleRepository implements ResponsiblesRepository {
 
     if (!responsible) return null
 
-    const address = await this.responsibleAddressRepository.findByResponsibleId(
-      responsible.id.toString(),
+    const address = await this.responsibleAddressRepository.findById(
+      responsible.addressId.toString(),
     )
 
     return [
@@ -127,7 +128,6 @@ export class InMemoryResponsibleRepository implements ResponsiblesRepository {
           state: address.state,
           city: address.city,
           createdAt: address.createdAt,
-          responsibleId: address.responsibleId,
         },
       }),
     ]
