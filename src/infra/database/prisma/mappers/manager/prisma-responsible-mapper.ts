@@ -2,7 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { DocumentCNPJ } from '@/core/entities/value-object/document-cnpj'
 import { DocumentCPF } from '@/core/entities/value-object/document-cpf'
 import { Responsible } from '@/domain/manager/enterprise/entities/responsible'
-import { ChangeLogEntry } from '@/domain/manager/enterprise/entities/responsible-address'
+import { ChangeLogEntry } from '@/domain/manager/enterprise/entities/address'
 import { User as PrismaUser, Prisma } from '@prisma/client'
 
 export class PrismaResponsibleMapper {
@@ -18,6 +18,7 @@ export class PrismaResponsibleMapper {
             : DocumentCPF.crateWithoutValidation(raw.document),
         phone: raw.phone,
         isActive: raw.isActive,
+        addressId: new UniqueEntityID(raw.addressId),
         changeLog: Array.isArray(raw.changeLog)
           ? (raw.changeLog as unknown as ChangeLogEntry[])
           : [],
@@ -39,6 +40,7 @@ export class PrismaResponsibleMapper {
       document: responsible.document.value,
       phone: responsible.phone,
       isActive: responsible.isActive,
+      addressId: responsible.addressId.toString(),
       changeLog: JSON.stringify(responsible.changeLog),
       createdAt: responsible.createdAt,
       updatedAt: responsible.updatedAt,

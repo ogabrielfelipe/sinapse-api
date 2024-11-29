@@ -24,6 +24,7 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
         phone: data.phone,
         role: 'RESPONSIBLE',
         isActive: true,
+        addressId: responsible.addressId.toString(),
         changeLog: data.changeLog,
         createdAt: data.createdAt,
         updatedAt: data.updatedAt,
@@ -51,7 +52,7 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
         id,
       },
       include: {
-        address: true,
+        addresses: true,
       },
     })
 
@@ -59,7 +60,7 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
       return null
     }
 
-    if (!responsible.address) {
+    if (!responsible.addresses) {
       return null
     }
 
@@ -100,30 +101,32 @@ export class PrismaResponsibleRepository implements ResponsiblesRepository {
   async findDetailsByAttributes(
     search: GetResponsiblesByAttributesRequest,
   ): Promise<ResponsibleDetails[] | null> {
+    const where = {
+      ...(search.id && { id: search.id }),
+      ...(search.name && { name: search.name }),
+      ...(search.document && { document: search.document }),
+      ...(search.phone && { phone: search.phone }),
+      ...(search.email && { email: search.email }),
+      role: 'RESPONSIBLE' as const,
+    }
+
     const responsibleDetails = await this.prisma.user.findMany({
-      where: {
-        ...(search.id && { id: search.id }),
-        ...(search.name && { name: search.name }),
-        ...(search.document && { document: search.document }),
-        ...(search.phone && { phone: search.phone }),
-        ...(search.email && { email: search.email }),
-        role: 'RESPONSIBLE',
-      },
+      where,
       include: {
-        address: true,
+        addresses: true,
       },
     })
 
     if (!responsibleDetails.length) return null
 
-    return responsibleDetails
-      .filter((responsible) => responsible.address)
-      .map((responsible) =>
-        PrismaResponsibleDetailsMapper.toDomain(
-          responsible,
-          responsible.address[0],
-        ),
+    const responsibles = responsibleDetails.map((responsible) => {
+      return PrismaResponsibleDetailsMapper.toDomain(
+        responsible,
+        responsible.addresses,
       )
+    })
+
+    return responsibles
   }
 
   async delete(id: string): Promise<void> {

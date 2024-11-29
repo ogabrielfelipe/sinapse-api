@@ -2,7 +2,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { DocumentCNPJ } from '@/core/entities/value-object/document-cnpj'
 import { DocumentCPF } from '@/core/entities/value-object/document-cpf'
 import { ResponsibleDetails } from '@/domain/manager/application/use-cases/responsible/value-object/responsible-details'
-import { ChangeLogEntry } from '@/domain/manager/enterprise/entities/responsible-address'
+import { ChangeLogEntry } from '@/domain/manager/enterprise/entities/address'
 import { User as PrismaUser, Address as PrismaAddress } from '@prisma/client'
 
 export class PrismaResponsibleDetailsMapper {
@@ -32,7 +32,6 @@ export class PrismaResponsibleDetailsMapper {
         city: address.city,
         complement: address.complement,
         neighborhood: address.neighborhood,
-        responsibleId: new UniqueEntityID(address.userId),
         state: address.state,
         changeLog: Array.isArray(address.changeLog)
           ? (address.changeLog as unknown as ChangeLogEntry[])
