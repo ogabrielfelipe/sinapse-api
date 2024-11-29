@@ -19,7 +19,7 @@ describe('Get Responsible', () => {
   sut = new GetResponsibleByAttributesUseCase(inMemoryResponsibleRepository)
 
   it('should be able to get responsible for attributes', async () => {
-    const { responsibleAddress } = makeAddress(
+    const { address } = makeAddress(
       {
         street: 'street test',
         number: '123',
@@ -36,7 +36,7 @@ describe('Get Responsible', () => {
         name: 'John Doe',
         document: DocumentCPF.crateWithoutValidation('63558669061'),
         email: 'john.doe@example.com',
-        addressId: responsibleAddress.id,
+        addressId: address.id,
         password: '123456',
         phone: '1234567890',
       },
@@ -44,7 +44,7 @@ describe('Get Responsible', () => {
     )
 
     await inMemoryResponsibleRepository.create(responsible)
-    await inMemoryAddressRepository.create(responsibleAddress)
+    await inMemoryAddressRepository.create(address)
 
     const result = await sut.execute({ id: 'responsible-01' })
 

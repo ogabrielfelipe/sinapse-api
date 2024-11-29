@@ -24,7 +24,7 @@ describe('Edit Responsible', () => {
   })
 
   it('should be able to edit a responsible', async () => {
-    const { responsibleAddress } = makeAddress(
+    const { address } = makeAddress(
       {
         street: 'street test',
         number: '123',
@@ -41,7 +41,7 @@ describe('Edit Responsible', () => {
         name: 'John Doe',
         document: DocumentCPF.crateWithoutValidation('63558669061'),
         email: 'john.doe@example.com',
-        addressId: responsibleAddress.id,
+        addressId: address.id,
         password: '123456',
         phone: '1234567890',
       },
@@ -52,7 +52,7 @@ describe('Edit Responsible', () => {
 
     expect(inMemoryResponsibleRepository.items[0].name).toEqual('John Doe')
 
-    await inMemoryAddressRepository.create(responsibleAddress)
+    await inMemoryAddressRepository.create(address)
 
     expect(inMemoryAddressRepository.items[0].street).toEqual('street test')
 
