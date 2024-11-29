@@ -22,22 +22,23 @@ enum UserRole {
 }
 
 model User {
-  id       String  @id @default(cuid()) @db.VarChar(30)
-  name     String
-  email    String  @unique
-  password String
-  document String
-  phone    String
-  isActive Boolean @default(false) @map("active")
+  id        String  @id @default(cuid()) @db.VarChar(30)
+  name      String
+  email     String  @unique
+  password  String
+  document  String
+  phone     String
+  isActive  Boolean @default(false) @map("active")
+  addressId String? @map("address_id") @db.VarChar(30)
 
-  changeLog Json?
+  changeLog Json? @map("change_log")
 
   role UserRole @default(STUDENT)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  address Address[]
+  addresses Address? @relation(fields: [addressId], references: [id])
 
   @@map("users")
 }
@@ -51,13 +52,29 @@ model Address {
   state        String
   complement   String
 
-  changeLog Json?
+  changeLog Json? @map("change_log")
 
-  userId String? @map("user_id")
-  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  users   User[]
+  schools School[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("addresses")
+}
+
+model School {
+  id        String  @id @default(cuid()) @db.VarChar(30)
+  name      String
+  shortName String  @db.VarChar(50)
+  isActive  Boolean
+  addressId String? @map("address_id") @db.VarChar(30)
+
+  changeLog Json?    @map("change_log")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  addresses Address? @relation(fields: [addressId], references: [id])
+
+  @@map("schools")
 }
