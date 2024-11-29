@@ -10,7 +10,6 @@ interface ChangeLogEntry {
 
 interface ResponsibleAddress {
   addressId: string
-  responsibleId: string
   street: string
   number: string
   neighborhood: string
@@ -48,7 +47,6 @@ export class ResponsibleDetailsPresenter {
       isActive: responsibleDetails.isActive,
       address: {
         addressId: responsibleDetails.address.addressId.toString(),
-        responsibleId: responsibleDetails.address.responsibleId.toString(),
         street: responsibleDetails.address.street,
         number: responsibleDetails.address.number,
         neighborhood: responsibleDetails.address.neighborhood,

@@ -1,6 +1,6 @@
 import { createZodDto } from '@anatine/zod-nestjs'
 import { generateSchema } from '@anatine/zod-openapi'
-import { RegisterResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/register-responsible'
+import { CreateResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/create-responsible'
 import {
   BadRequestException,
   Body,
@@ -39,7 +39,7 @@ class CreateResponsibleDto extends createZodDto(createResponsibleBodySchema) {}
 @ApiTags('responsibles')
 @Controller('/responsibles')
 export class CreateResponsibleController {
-  constructor(private registerResponsible: RegisterResponsibleUseCase) {}
+  constructor(private registerResponsible: CreateResponsibleUseCase) {}
 
   @Post()
   @HttpCode(201)

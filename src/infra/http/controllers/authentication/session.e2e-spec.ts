@@ -5,38 +5,38 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { hash } from 'bcryptjs'
-import { ResponsibleAddressFactory } from 'test/factories/make-responsible-address'
+import { AddressFactory } from 'test/factories/make-responsible-address'
 
 describe('E2E -> Session', () => {
   let app: INestApplication
 
   let makeResponsible: ResponsibleFactory
-  let makeResponsibleAddress: ResponsibleAddressFactory
+  let makeAddress: AddressFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [ResponsibleFactory, ResponsibleAddressFactory],
+      providers: [ResponsibleFactory, AddressFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     makeResponsible = moduleRef.get(ResponsibleFactory)
-    makeResponsibleAddress = moduleRef.get(ResponsibleAddressFactory)
+    makeAddress = moduleRef.get(AddressFactory)
 
     await app.init()
   })
 
   it('should be able to create session', async () => {
+    const address = await makeAddress.makePrismaAddress({
+      street: 'name test',
+    })
+
     const createdResponsible = await makeResponsible.makePrismaResponsible({
       name: 'John Doe',
       email: 'john.doe@example.com',
       password: await hash('securePassword123', 8),
-    })
-
-    await makeResponsibleAddress.makePrismaResponsibleAddress({
-      street: 'name test',
-      responsibleId: createdResponsible.id,
+      addressId: address.id,
     })
 
     const response = await request(app.getHttpServer())

@@ -6,30 +6,36 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { JwtService } from '@nestjs/jwt'
+import { AddressFactory } from 'test/factories/make-responsible-address'
 
 describe('E2E -> Create Account Responsible', () => {
   let app: INestApplication
   let prisma: PrismaService
   let jwt: JwtService
   let makeResponsible: ResponsibleFactory
+  let makeAddress: AddressFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [ResponsibleFactory],
+      providers: [ResponsibleFactory, AddressFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
     makeResponsible = moduleRef.get(ResponsibleFactory)
+    makeAddress = moduleRef.get(AddressFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to create a new Responsible', async () => {
-    const createdResponsible = await makeResponsible.makePrismaResponsible({})
+    const createdAddress = await makeAddress.makePrismaAddress({})
+    const createdResponsible = await makeResponsible.makePrismaResponsible({
+      addressId: createdAddress.id,
+    })
 
     const accessToken = jwt.sign({
       sub: createdResponsible.id.toString(),
@@ -59,21 +65,21 @@ describe('E2E -> Create Account Responsible', () => {
 
     expect(response.statusCode).toBe(201)
 
-    const responsible = await prisma.user.findFirst({
+    const responsible = await prisma.user.findUnique({
       where: {
         email: 'john.doe@example.com',
         role: 'RESPONSIBLE',
       },
       include: {
-        address: true,
+        addresses: true,
       },
     })
 
     expect(responsible.id).toEqual(expect.any(String))
 
-    const address = await prisma.address.findFirst({
+    const address = await prisma.address.findUnique({
       where: {
-        userId: responsible.id,
+        id: responsible.addressId,
       },
     })
 

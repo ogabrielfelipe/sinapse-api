@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
 import { CreateResponsibleController } from './create-responsible.controller'
-import { RegisterResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/register-responsible'
+import { CreateResponsibleUseCase } from '@/domain/manager/application/use-cases/responsible/create-responsible'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { CryptographyModule } from '@/infra/cryptography/cryptography.module'
 import { EditResponsibleController } from './edit-responsible.controller'
@@ -22,7 +22,7 @@ import { GetResponsibleByAttributesUseCase } from '@/domain/manager/application/
     GetResponsiblesController,
   ],
   providers: [
-    RegisterResponsibleUseCase,
+    CreateResponsibleUseCase,
     EditResponsibleUseCase,
     ChangePasswordResponsibleUseCase,
     DeleteResponsibleUseCase,

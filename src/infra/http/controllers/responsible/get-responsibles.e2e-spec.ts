@@ -4,58 +4,59 @@ import { AppModule } from '@/infra/app.module'
 import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
-import { ResponsibleAddressFactory } from 'test/factories/make-responsible-address'
+import { AddressFactory } from 'test/factories/make-responsible-address'
 import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Get Responsibles', () => {
   let app: INestApplication
 
   let makeResponsible: ResponsibleFactory
-  let makeResponsibleAddress: ResponsibleAddressFactory
+  let makeAddress: AddressFactory
   let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [ResponsibleFactory, ResponsibleAddressFactory],
+      providers: [ResponsibleFactory, AddressFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     makeResponsible = moduleRef.get(ResponsibleFactory)
-    makeResponsibleAddress = moduleRef.get(ResponsibleAddressFactory)
+    makeAddress = moduleRef.get(AddressFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to get Responsibles by attributes', async () => {
-    const user = await makeResponsible.makePrismaResponsible({})
-
+    const address = await makeAddress.makePrismaAddress({})
+    const user = await makeResponsible.makePrismaResponsible({
+      addressId: address.id,
+    })
     const accessToken = jwt.sign({
       sub: user.id.toString(),
       roles: ['RESPONSIBLE'],
     })
 
-    const createdResponsible = await makeResponsible.makePrismaResponsible({
+    const createdAddress = await makeAddress.makePrismaAddress({})
+
+    await makeResponsible.makePrismaResponsible({
       name: 'John Doe',
       email: 'john.doe@example.com',
       password: 'pass1244',
       phone: '22999995555',
+      addressId: createdAddress.id,
     })
 
-    await makeResponsibleAddress.makePrismaResponsibleAddress({
-      responsibleId: createdResponsible.id,
-    })
+    const createdAddress2 = await makeAddress.makePrismaAddress({})
 
-    const createdResponsible2 = await makeResponsible.makePrismaResponsible({
+    await makeResponsible.makePrismaResponsible({
       name: 'Fulano de Tal',
       email: 'fulano.tal@example.com',
       password: 'pass1244',
       phone: '22999995555',
-    })
-    await makeResponsibleAddress.makePrismaResponsibleAddress({
-      responsibleId: createdResponsible2.id,
+      addressId: createdAddress2.id,
     })
 
     const response = await request(app.getHttpServer())

@@ -6,6 +6,7 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { JwtService } from '@nestjs/jwt'
+import { AddressFactory } from 'test/factories/make-responsible-address'
 
 describe('E2E -> Delete a Responsible', () => {
   let app: INestApplication
@@ -13,25 +14,29 @@ describe('E2E -> Delete a Responsible', () => {
   let jwt: JwtService
 
   let makeResponsible: ResponsibleFactory
+  let makeAddress: AddressFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [ResponsibleFactory],
+      providers: [ResponsibleFactory, AddressFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
     makeResponsible = moduleRef.get(ResponsibleFactory)
+    makeAddress = moduleRef.get(AddressFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   it('should be able to change password of the a Responsible', async () => {
-    const user = await makeResponsible.makePrismaResponsible({})
-
+    const createdAddress = await makeAddress.makePrismaAddress({})
+    const user = await makeResponsible.makePrismaResponsible({
+      addressId: createdAddress.id,
+    })
     const accessToken = jwt.sign({
       sub: user.id.toString(),
       roles: ['RESPONSIBLE'],
@@ -41,6 +46,7 @@ describe('E2E -> Delete a Responsible', () => {
       name: 'John Doe',
       email: 'John.Doe@example.com',
       password: 'pass1244',
+      addressId: createdAddress.id,
     })
 
     const response = await request(app.getHttpServer())
