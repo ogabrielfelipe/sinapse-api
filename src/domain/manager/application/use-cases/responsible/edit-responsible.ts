@@ -10,7 +10,7 @@ import { InvalidCNPJError } from '@/core/errors/invalid-cnpj'
 import { DocumentCPF } from '@/core/entities/value-object/document-cpf'
 import { InvalidCPFError } from '@/core/errors/invalid-cpf'
 import { Address } from '@/domain/manager/enterprise/entities/address'
-import { AddressesRepository } from '../../repositories/responsible/address-repository'
+import { AddressesRepository } from '../../repositories/address-repository'
 import { AddressNotFoundError } from './errors/address-not-found'
 
 type EditResponsibleUseCaseRequest = {

@@ -6,7 +6,7 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { JwtService } from '@nestjs/jwt'
-import { AddressFactory } from 'test/factories/make-responsible-address'
+import { AddressFactory } from 'test/factories/make-address'
 
 describe('E2E -> Change Password of the an Account Responsible', () => {
   let app: INestApplication

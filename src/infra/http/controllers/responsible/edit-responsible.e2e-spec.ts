@@ -5,7 +5,7 @@ import { AppModule } from '@/infra/app.module'
 import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
-import { AddressFactory } from 'test/factories/make-responsible-address'
+import { AddressFactory } from 'test/factories/make-address'
 import { JwtService } from '@nestjs/jwt'
 
 describe('E2E -> Edit Account Responsible', () => {

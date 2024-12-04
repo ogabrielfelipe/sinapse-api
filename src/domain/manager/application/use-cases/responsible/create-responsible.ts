@@ -11,7 +11,7 @@ import { HashGenerator } from '@/core/application/cryptography/hash-generator'
 import { Injectable } from '@nestjs/common'
 import { Address } from '@/domain/manager/enterprise/entities/address'
 import { getDocumentType } from '@/core/utils/get-type-document'
-import { AddressesRepository } from '../../repositories/responsible/address-repository'
+import { AddressesRepository } from '../../repositories/address-repository'
 
 type CreateResponsibleUseCaseRequest = {
   name: string

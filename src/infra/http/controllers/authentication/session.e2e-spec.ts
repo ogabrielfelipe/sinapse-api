@@ -5,7 +5,7 @@ import { Test } from '@nestjs/testing'
 import { DatabaseModule } from '@/infra/database/database.module'
 import { ResponsibleFactory } from 'test/factories/make-responsible'
 import { hash } from 'bcryptjs'
-import { AddressFactory } from 'test/factories/make-responsible-address'
+import { AddressFactory } from 'test/factories/make-address'
 
 describe('E2E -> Session', () => {
   let app: INestApplication

@@ -1,7 +1,7 @@
 import { FakeHasher } from 'test/cryptography/fake-hasher'
 import { InMemoryResponsibleRepository } from './../../../../../../test/manager/application/repositories/in-memory-responsible-repository'
 import { makeResponsible } from 'test/factories/make-responsible'
-import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
+import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-repository'
 import { ChangePasswordResponsibleUseCase } from './change-password-responsible'
 import { FakeComparer } from 'test/cryptography/fake-comparer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'

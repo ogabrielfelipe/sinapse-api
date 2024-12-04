@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { AddressesRepository } from '@/domain/manager/application/repositories/responsible/address-repository'
+import { AddressesRepository } from '@/domain/manager/application/repositories/address-repository'
 import { Address } from '@/domain/manager/enterprise/entities/address'
 
 export class InMemoryAddressRepository implements AddressesRepository {

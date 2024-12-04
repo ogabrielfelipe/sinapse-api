@@ -65,7 +65,7 @@ export class EditResponsibleController {
   @ApiBody({ type: EditResponsibleDto })
   @ApiResponse({ status: 200, description: 'Responsible updated successfully' })
   @ApiResponse({ status: 400, description: 'Document invalid' })
-  @ApiResponse({ status: 400, description: 'Invalid type' })
+  @ApiResponse({ status: 400, description: 'Validation failed' })
   @ApiResponse({ status: 404, description: 'Responsible not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async handle(

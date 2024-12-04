@@ -1,6 +1,6 @@
 import { InMemoryResponsibleRepository } from './../../../../../../test/manager/application/repositories/in-memory-responsible-repository'
 import { makeResponsible } from 'test/factories/make-responsible'
-import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
+import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-repository'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { DeleteResponsibleUseCase } from './delete-responsible'
 import { ResponsibleNotFoundError } from './errors/responsible-not-found'

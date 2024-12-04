@@ -16,9 +16,9 @@ export interface SchoolProps {
   name: string
   shortName: string
   document: DocumentCNPJ
-  responsibleId: UniqueEntityID
-  addressId: UniqueEntityID
+  email: string
   isActive: boolean
+  addressId: UniqueEntityID
   createdAt: Date
   updatedAt?: Date | null
   changeLog: ChangeLogEntry[]
@@ -55,23 +55,13 @@ export class School extends Entity<SchoolProps> {
     this.touch()
   }
 
-  get responsibleId() {
-    return this.props.responsibleId
+  get email() {
+    return this.props.email
   }
 
-  set responsibleId(responsibleId: UniqueEntityID) {
-    this.logChange('responsibleId', this.props.responsibleId, responsibleId)
-    this.props.responsibleId = responsibleId
-    this.touch()
-  }
-
-  get address() {
-    return this.props.addressId
-  }
-
-  set address(address: UniqueEntityID) {
-    this.logChange('addressId', this.props.addressId, address)
-    this.props.addressId = address
+  set email(email: string) {
+    this.logChange('email', this.props.email, email)
+    this.props.email = email
     this.touch()
   }
 
@@ -82,6 +72,16 @@ export class School extends Entity<SchoolProps> {
   set isActive(isActive: boolean) {
     this.logChange('isActive', this.props.isActive, isActive)
     this.props.isActive = isActive
+    this.touch()
+  }
+
+  get addressId() {
+    return this.props.addressId
+  }
+
+  set addressId(addressId: UniqueEntityID) {
+    this.logChange('addressId', this.props.addressId, addressId)
+    this.props.addressId = addressId
     this.touch()
   }
 
@@ -97,6 +97,10 @@ export class School extends Entity<SchoolProps> {
     this.props.updatedAt = new Date()
   }
 
+  get changeLog() {
+    return this.props.changeLog
+  }
+
   private logChange(field: string, oldValue: FieldLogs, newValue: FieldLogs) {
     const changeLogEntry: ChangeLogEntry = {
       field,
@@ -108,7 +112,7 @@ export class School extends Entity<SchoolProps> {
   }
 
   static create(
-    props: Optional<SchoolProps, 'updatedAt'>,
+    props: Optional<SchoolProps, 'updatedAt' | 'createdAt' | 'changeLog'>,
     id?: UniqueEntityID,
   ) {
     const documentValidated = DocumentCNPJ.create(props.document.value)

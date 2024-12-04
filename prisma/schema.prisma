@@ -66,7 +66,9 @@ model Address {
 model School {
   id        String  @id @default(cuid()) @db.VarChar(30)
   name      String
+  email     String
   shortName String  @db.VarChar(50)
+  document  String  @unique @db.VarChar(14)
   isActive  Boolean
   addressId String? @map("address_id") @db.VarChar(30)
 

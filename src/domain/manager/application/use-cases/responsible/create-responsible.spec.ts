@@ -1,7 +1,7 @@
 import { InMemoryResponsibleRepository } from 'test/manager/application/repositories/in-memory-responsible-repository'
 import { CreateResponsibleUseCase } from './create-responsible'
 import { FakeHasher } from 'test/cryptography/fake-hasher'
-import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
+import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-repository'
 
 let responsibleRepository: InMemoryResponsibleRepository
 let addressRepository: InMemoryAddressRepository

@@ -4,8 +4,8 @@ import { makeResponsible } from 'test/factories/make-responsible'
 import { EditResponsibleUseCase } from './edit-responsible'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { DocumentCPF } from '@/core/entities/value-object/document-cpf'
-import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-responsible-repository'
-import { makeAddress } from 'test/factories/make-responsible-address'
+import { InMemoryAddressRepository } from 'test/manager/application/repositories/in-memory-address-repository'
+import { makeAddress } from 'test/factories/make-address'
 
 let inMemoryResponsibleRepository: InMemoryResponsibleRepository
 let inMemoryAddressRepository: InMemoryAddressRepository

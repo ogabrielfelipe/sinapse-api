@@ -3,7 +3,7 @@ import { ResponsiblesRepository } from '@/domain/manager/application/repositorie
 import { GetResponsiblesByAttributesRequest } from '@/domain/manager/application/use-cases/responsible/get-responsibles-by-attributes'
 import { ResponsibleDetails } from '@/domain/manager/application/use-cases/responsible/value-object/responsible-details'
 import { Responsible } from '@/domain/manager/enterprise/entities/responsible'
-import { InMemoryAddressRepository } from './in-memory-address-responsible-repository'
+import { InMemoryAddressRepository } from './in-memory-address-repository'
 
 export class InMemoryResponsibleRepository implements ResponsiblesRepository {
   public items: Responsible[] = []

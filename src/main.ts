@@ -9,6 +9,8 @@ async function bootstrap() {
   const envService = app.get(EnvService)
   const port = envService.get('PORT')
 
+  app.enableCors()
+
   const config = new DocumentBuilder()
     .setTitle('Sinapse API')
     .setDescription('This document describes the Sinapse API')
