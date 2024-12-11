@@ -7,17 +7,17 @@ import { Address as PrismaAddress, Prisma } from '@prisma/client'
 
 export class PrismaAddressMapper {
   static toDomain(raw: PrismaAddress): Address {
+    const changeLog: ChangeLogEntry[] = JSON.parse(raw.changeLog.toString())
+
     const address = Address.create(
       {
-        street: raw.state,
+        street: raw.street,
         number: raw.number,
         state: raw.state,
         city: raw.city,
         complement: raw.complement,
         neighborhood: raw.neighborhood,
-        changeLog: Array.isArray(raw.changeLog)
-          ? (raw.changeLog as unknown as ChangeLogEntry[])
-          : [],
+        changeLog,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },

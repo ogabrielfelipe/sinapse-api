@@ -7,6 +7,8 @@ import { User as PrismaUser, Prisma } from '@prisma/client'
 
 export class PrismaResponsibleMapper {
   static toDomain(raw: PrismaUser): Responsible {
+    const changeLog: ChangeLogEntry[] = JSON.parse(raw.changeLog.toString())
+
     const responsible = Responsible.create(
       {
         name: raw.name,
@@ -19,9 +21,7 @@ export class PrismaResponsibleMapper {
         phone: raw.phone,
         isActive: raw.isActive,
         addressId: new UniqueEntityID(raw.addressId),
-        changeLog: Array.isArray(raw.changeLog)
-          ? (raw.changeLog as unknown as ChangeLogEntry[])
-          : [],
+        changeLog,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
       },

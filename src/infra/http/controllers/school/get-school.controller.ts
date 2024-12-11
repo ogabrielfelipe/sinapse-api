@@ -77,8 +77,6 @@ export class GetSchoolsController {
   async handle(@Query() query: GetSchoolsDto) {
     const { name, document, email, shortName, id } = query
 
-    console.log(query)
-
     const result = await this.getSchoolByAttributesUseCase.execute({
       name,
       document,

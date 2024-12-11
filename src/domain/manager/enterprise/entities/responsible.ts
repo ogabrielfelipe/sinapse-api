@@ -23,10 +23,14 @@ export interface ResponsibleProps {
   addressId: UniqueEntityID
   createdAt: Date
   updatedAt?: Date | null
-  changeLog: ChangeLogEntry[]
+  changeLog: Array<ChangeLogEntry>
 }
 
 export class Responsible extends Entity<ResponsibleProps> {
+  constructor(props: ResponsibleProps, id?: UniqueEntityID) {
+    super(props, id)
+  }
+
   get name() {
     return this.props.name
   }

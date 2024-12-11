@@ -68,8 +68,6 @@ describe('E2E -> Get Schools', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
 
-    console.log(response.body)
-
     expect(response.statusCode).toBe(200)
     expect(response.body.schools).toHaveLength(2)
 

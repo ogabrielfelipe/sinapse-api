@@ -10,6 +10,11 @@ export class PrismaResponsibleDetailsMapper {
     responsible: PrismaUser,
     address: PrismaAddress,
   ): ResponsibleDetails {
+    const changeLogResponsible =
+      responsible.changeLog as unknown as ChangeLogEntry[]
+
+    const changeLogAddresses = address.changeLog as unknown as ChangeLogEntry[]
+
     const responsibleDetails = ResponsibleDetails.create({
       responsibleId: new UniqueEntityID(responsible.id),
       name: responsible.name,
@@ -20,9 +25,7 @@ export class PrismaResponsibleDetailsMapper {
           : DocumentCPF.crateWithoutValidation(responsible.document),
       phone: responsible.phone,
       isActive: responsible.isActive,
-      changeLog: Array.isArray(responsible.changeLog)
-        ? (responsible.changeLog as unknown as ChangeLogEntry[])
-        : [],
+      changeLog: changeLogResponsible,
       createdAt: responsible.createdAt,
       updatedAt: responsible.updatedAt,
       address: {
@@ -33,9 +36,7 @@ export class PrismaResponsibleDetailsMapper {
         complement: address.complement,
         neighborhood: address.neighborhood,
         state: address.state,
-        changeLog: Array.isArray(address.changeLog)
-          ? (address.changeLog as unknown as ChangeLogEntry[])
-          : [],
+        changeLog: changeLogAddresses,
         createdAt: address.createdAt,
         updatedAt: address.updatedAt,
       },

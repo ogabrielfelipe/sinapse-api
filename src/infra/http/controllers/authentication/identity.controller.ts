@@ -36,8 +36,6 @@ export class IdentifyController {
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async handle(@CurrentUser() user: UserPayload) {
-    console.log(user, user.sub)
-
     const result = await this.identify.execute({
       id: user.sub,
     })

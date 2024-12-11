@@ -100,13 +100,15 @@ export class Address extends Entity<AddressProps> {
   }
 
   private logChange(field: string, oldValue: FieldLogs, newValue: FieldLogs) {
-    const changeLogEntry: ChangeLogEntry = {
-      field,
-      oldValue,
-      newValue,
-      timestamp: new Date(),
+    if (oldValue !== newValue) {
+      const changeLogEntry: ChangeLogEntry = {
+        field,
+        oldValue,
+        newValue,
+        timestamp: new Date(),
+      }
+      this.props.changeLog.push(changeLogEntry)
     }
-    this.props.changeLog.push(changeLogEntry)
   }
 
   static create(

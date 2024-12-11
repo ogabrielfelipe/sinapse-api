@@ -30,8 +30,6 @@ describe('Authenticate Responsible', () => {
       id: responsible.id.toString(),
     })
 
-    console.log(result.value)
-
     expect(result.isRight()).toBe(true)
     expect(result.value).toEqual({
       id: expect.any(String),

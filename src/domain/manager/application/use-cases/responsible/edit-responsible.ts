@@ -96,6 +96,8 @@ export class EditResponsibleUseCase {
         number: address.number,
         state: address.state,
         street: address.street,
+        changeLog: address.changeLog,
+        createdAt: address.createdAt,
       },
       address.id,
     )
@@ -108,6 +110,8 @@ export class EditResponsibleUseCase {
         isActive: responsible.isActive,
         phone: responsible.phone,
         addressId: addressDomain.id,
+        changeLog: responsible.changeLog,
+        createdAt: responsible.createdAt,
         password: '',
       },
       responsible.id,
